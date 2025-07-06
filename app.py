@@ -34,12 +34,6 @@ def post_to_twitter(tweet_text):
             "TWITTER_API_KEY", "TWITTER_API_SECRET",
             "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_TOKEN_SECRET"
         ]
-        print("TWITTER_API_KEY:", os.getenv("TWITTER_API_KEY"), "...", len(os.getenv("TWITTER_API_KEY")))
-        print("TWITTER_API_SECRET:", os.getenv("TWITTER_API_SECRET"), "...", len(os.getenv("TWITTER_API_SECRET")))
-        print("TWITTER_ACCESS_TOKEN:", os.getenv("TWITTER_ACCESS_TOKEN"), "...", len(os.getenv("TWITTER_ACCESS_TOKEN")))
-        print("TWITTER_ACCESS_TOKEN_SECRET:", os.getenv("TWITTER_ACCESS_TOKEN_SECRET"), "...", len(os.getenv("TWITTER_ACCESS_TOKEN_SECRET")))
-        print("TWITTER_BEARER_TOKEN:", os.getenv("TWITTER_BEARER_TOKEN"), "...", len(os.getenv("TWITTER_BEARER_TOKEN")))
-
         if not all(os.getenv(k) for k in required_keys):
             print("⚠️ Twitter API keys not configured. Simulating tweet post.")
             print(f"Simulated tweet: {tweet_text}")
