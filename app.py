@@ -3,7 +3,6 @@ import google.generativeai as genai
 import tweepy
 from dotenv import load_dotenv
 import os
-import time
 from typing import Optional
 
 # Load environment variables
@@ -35,7 +34,12 @@ def post_to_twitter(tweet_text):
             "TWITTER_API_KEY", "TWITTER_API_SECRET",
             "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_TOKEN_SECRET"
         ]
-        
+        print("TWITTER_API_KEY:", os.getenv("TWITTER_API_KEY"), "...", len(os.getenv("TWITTER_API_KEY")))
+        print("TWITTER_API_SECRET:", os.getenv("TWITTER_API_SECRET"), "...", len(os.getenv("TWITTER_API_SECRET")))
+        print("TWITTER_ACCESS_TOKEN:", os.getenv("TWITTER_ACCESS_TOKEN"), "...", len(os.getenv("TWITTER_ACCESS_TOKEN")))
+        print("TWITTER_ACCESS_TOKEN_SECRET:", os.getenv("TWITTER_ACCESS_TOKEN_SECRET"), "...", len(os.getenv("TWITTER_ACCESS_TOKEN_SECRET")))
+        print("TWITTER_BEARER_TOKEN:", os.getenv("TWITTER_BEARER_TOKEN"), "...", len(os.getenv("TWITTER_BEARER_TOKEN")))
+
         if not all(os.getenv(k) for k in required_keys):
             print("⚠️ Twitter API keys not configured. Simulating tweet post.")
             print(f"Simulated tweet: {tweet_text}")
@@ -46,12 +50,13 @@ def post_to_twitter(tweet_text):
             consumer_key=os.getenv("TWITTER_API_KEY"),
             consumer_secret=os.getenv("TWITTER_API_SECRET"),
             access_token=os.getenv("TWITTER_ACCESS_TOKEN"),
-            access_token_secret=os.getenv("TWITTER_ACCESS_TOKEN_SECRET"),
-            wait_on_rate_limit=True,
+            access_token_secret=os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
         )
-        response = client.create_tweet(text=tweet_text)
+        response = client.create_tweet(text=tweet_text, user_auth=True)
+        if not response.data:
+            raise Exception("No data returned from Twitter API")
         print(f"✅ Successfully tweeted: {tweet_text}")
-        return response
+        return {"id": response.data["id"], "text": response.data["text"]}
     except Exception as e:
         print(f"❌ Error posting tweet: {e}")
         return None
